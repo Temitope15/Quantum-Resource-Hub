@@ -10,7 +10,6 @@ const UI = (() => {
   const icons = {
     arrow:  `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>`,
     chat:   `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8v.5z"/></svg>`,
-    search: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>`,
     empty:  `<svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>`,
     err:    `<svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg>`,
   };
@@ -25,6 +24,8 @@ const UI = (() => {
       r.timestamp   ? timeAgo(r.timestamp) : '',
     ].filter(Boolean);
 
+    const hasUrl = r.url && r.url !== '#';
+
     return `
       <article class="card ${catClass(cat)}" style="animation-delay:${delay}s" data-resource-id="${escapeHtml(r.id)}">
         <header class="card-head">
@@ -38,10 +39,10 @@ const UI = (() => {
             ${meta.map((m, i) => i === 0 ? `<span>${m}</span>` : `<span class="sep"></span><span>${m}</span>`).join('')}
           </div>` : ''}
         <footer class="card-foot">
-          <a class="card-link" href="${escapeHtml(r.url || '#')}" target="_blank" rel="noopener" data-stop>
-            Open ${icons.arrow}
-          </a>
-          <button class="card-comments" data-action="comments" data-resource-id="${escapeHtml(r.id)}">
+          ${hasUrl
+            ? `<a class="card-link" href="${escapeHtml(r.url)}" target="_blank" rel="noopener" data-stop>View ${icons.arrow}</a>`
+            : `<span class="card-link" style="color:var(--muted); cursor:default;">No link</span>`}
+          <button class="card-comments" data-action="open-detail" data-resource-id="${escapeHtml(r.id)}">
             ${icons.chat} <strong>${commentCount}</strong> ${commentCount === 1 ? 'note' : 'notes'}
           </button>
         </footer>
@@ -81,7 +82,7 @@ const UI = (() => {
     $('#grid').innerHTML = `
       <div class="state-block">
         <span class="spinner"></span>
-        <span style="font-family:var(--mono); font-size:12px; letter-spacing:0.05em;">Fetching the archive…</span>
+        <span style="font-size:13px; letter-spacing:0.02em;">Fetching the archive…</span>
       </div>`;
   };
 
@@ -90,6 +91,45 @@ const UI = (() => {
     $('#stat-total').textContent    = total;
     $('#stat-comments').textContent = comments;
     $('#stat-cats').textContent     = categories;
+  };
+
+  /* ── RESOURCE DETAIL ───────────────────────────── */
+  const renderResourceDetail = (resource, index, comments) => {
+    const cat   = resource.category || 'Other';
+    const modal = $('#detailOverlay .modal');
+
+    /* Reset prior category classes, then apply current one
+       — drives the colored top bar via --cat-color */
+    modal.className = `modal modal-lg ${catClass(cat)}`;
+
+    $('#dNum').textContent   = `№ ${padNum(index + 1)}`;
+    $('#dCat').textContent   = cat;
+    $('#detailTitle').textContent = resource.title || 'Untitled';
+
+    const metaParts = [];
+    if (resource.submittedBy) metaParts.push(`<span class="author">${escapeHtml(resource.submittedBy)}</span>`);
+    if (resource.timestamp)   metaParts.push(`<span>${timeAgo(resource.timestamp)}</span>`);
+    $('#dMeta').innerHTML = metaParts.join('<span class="sep"></span>') || '';
+
+    const desc = $('#dDesc');
+    if (resource.description) {
+      desc.textContent = resource.description;
+      desc.style.display = '';
+    } else {
+      desc.textContent = '';
+      desc.style.display = 'none';
+    }
+
+    const openLink = $('#dOpen');
+    if (resource.url) {
+      openLink.href = resource.url;
+      openLink.style.display = '';
+    } else {
+      openLink.style.display = 'none';
+    }
+
+    renderComments(comments);
+    $('#dNoteCount').textContent = comments.length;
   };
 
   /* ── COMMENTS ─────────────────────────────────── */
@@ -109,10 +149,7 @@ const UI = (() => {
       </div>`).join('');
   };
 
-  const setCommentResource = (resource) => {
-    $('#cPreviewTitle').textContent = resource.title || 'Untitled';
-    $('#cPreviewUrl').textContent   = resource.url   || '';
-  };
+  const updateNoteCount = (n) => { $('#dNoteCount').textContent = n; };
 
   /* ── MODALS ────────────────────────────────────── */
   const openModal = (id) => {
@@ -125,7 +162,10 @@ const UI = (() => {
     if (!$$('.overlay.open').length) document.body.style.overflow = '';
   };
 
-  const closeAllModals = () => $$('.overlay').forEach(o => o.classList.remove('open'));
+  const closeAllModals = () => {
+    $$('.overlay').forEach(o => o.classList.remove('open'));
+    document.body.style.overflow = '';
+  };
 
   /* ── FORMS ─────────────────────────────────────── */
   const readAddForm = () => ({
@@ -176,7 +216,7 @@ const UI = (() => {
 
   return {
     renderGrid, renderError, renderLoading, renderStats,
-    renderComments, setCommentResource,
+    renderResourceDetail, renderComments, updateNoteCount,
     openModal, closeModal, closeAllModals,
     readAddForm, clearAddForm,
     readCommentForm, clearCommentForm,

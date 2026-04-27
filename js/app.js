@@ -17,6 +17,7 @@
   const commentCountFor = (id) => state.comments.filter(c => c.resourceId === id).length;
   const commentsFor     = (id) => state.comments.filter(c => c.resourceId === id);
   const findResource    = (id) => state.resources.find(r => r.id === id);
+  const indexOfResource = (id) => state.resources.findIndex(r => r.id === id);
 
   const visibleResources = () => {
     const q = state.query.toLowerCase();
@@ -56,19 +57,18 @@
 
   const handleGridClick = (e) => {
     if (e.target.closest('[data-stop]')) return;
-    const trigger = e.target.closest('[data-action="comments"]') || e.target.closest('.card');
+    const trigger = e.target.closest('[data-action="open-detail"]') || e.target.closest('.card');
     if (!trigger) return;
     const id = trigger.dataset.resourceId;
-    if (id) openCommentsFor(id);
+    if (id) openDetail(id);
   };
 
-  const openCommentsFor = (id) => {
+  const openDetail = (id) => {
     const r = findResource(id);
     if (!r) return;
     state.activeResourceId = id;
-    UI.setCommentResource(r);
-    UI.renderComments(commentsFor(id));
-    UI.openModal('commentOverlay');
+    UI.renderResourceDetail(r, indexOfResource(id), commentsFor(id));
+    UI.openModal('detailOverlay');
   };
 
   const handleAddSubmit = async () => {
@@ -93,7 +93,7 @@
     } catch {
       UI.toast('Network error. Check connection.', false);
     } finally {
-      UI.setBusy('addSubmitBtn', false, '→ Submit Resource');
+      UI.setBusy('addSubmitBtn', false, 'Submit Resource');
     }
   };
 
@@ -105,7 +105,6 @@
     try {
       const res = await API.addComment({ resourceId: state.activeResourceId, comment, commenterName });
       if (res.success || res.id) {
-        // Optimistic local update
         state.comments.push({
           commentId:    res.id || `C${Date.now()}`,
           resourceId:   state.activeResourceId,
@@ -114,7 +113,9 @@
           timestamp:    new Date().toISOString(),
         });
         UI.clearCommentForm();
-        UI.renderComments(commentsFor(state.activeResourceId));
+        const list = commentsFor(state.activeResourceId);
+        UI.renderComments(list);
+        UI.updateNoteCount(list.length);
         refreshAll();
         UI.toast('Note posted.', true);
       } else {
@@ -123,7 +124,7 @@
     } catch {
       UI.toast('Network error. Check connection.', false);
     } finally {
-      UI.setBusy('commentSubmitBtn', false, '→ Post Note');
+      UI.setBusy('commentSubmitBtn', false, 'Post Note');
     }
   };
 

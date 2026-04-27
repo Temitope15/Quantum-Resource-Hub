@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..700,30..100;1,9..144,300..700,30..100&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300..700&family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..700,30..100;1,9..144,300..700,30..100&display=swap"
     rel="stylesheet">
 
   <link rel="stylesheet" href="css/styles.css" />
@@ -164,24 +164,40 @@
 </div>
 
 
-<!-- ═══ COMMENTS MODAL ═════════════════════════════ -->
-<div class="overlay" id="commentOverlay" role="dialog" aria-modal="true" aria-labelledby="commentModalTitle">
-  <div class="modal">
-    <div class="modal-head">
-      <div class="modal-eyebrow">Community Notes</div>
-      <h2 class="modal-title" id="commentModalTitle">Notes <em>&amp; corrections</em></h2>
-      <button class="modal-close" data-close="commentOverlay" aria-label="Close">✕</button>
+<!-- ═══ RESOURCE DETAIL MODAL ══════════════════════ -->
+<div class="overlay" id="detailOverlay" role="dialog" aria-modal="true" aria-labelledby="detailTitle">
+  <div class="modal modal-lg">
+    <button class="modal-close" data-close="detailOverlay" aria-label="Close">✕</button>
+
+    <div class="detail">
+      <div class="detail-head">
+        <span class="detail-num" id="dNum">№ 001</span>
+        <span class="detail-cat" id="dCat">Other</span>
+      </div>
+
+      <h2 class="detail-title" id="detailTitle">—</h2>
+
+      <div class="detail-meta" id="dMeta"></div>
+
+      <p class="detail-desc" id="dDesc"></p>
+
+      <a class="detail-open" id="dOpen" href="#" target="_blank" rel="noopener">
+        <span>Open resource</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg>
+      </a>
     </div>
 
-    <div class="modal-body">
-      <div class="resource-preview">
-        <div class="resource-preview-title" id="cPreviewTitle">—</div>
-        <div class="resource-preview-url"   id="cPreviewUrl">—</div>
+    <hr class="divider" />
+
+    <div class="detail-notes">
+      <div class="notes-header">
+        <span class="section-tag">Community Notes</span>
+        <span class="notes-count" id="dNoteCount">0</span>
       </div>
 
       <div class="comments-list" id="commentsList"></div>
 
-      <hr class="divider" />
+      <hr class="divider divider-soft" />
 
       <div class="section-tag">Leave a Note</div>
 
@@ -194,7 +210,7 @@
         <textarea id="c-text" placeholder="e.g. Link is dead — try this mirror instead: https://…"></textarea>
       </div>
 
-      <button class="submit-btn" id="commentSubmitBtn">→ Post Note</button>
+      <button class="submit-btn" id="commentSubmitBtn">Post Note</button>
     </div>
   </div>
 </div>
