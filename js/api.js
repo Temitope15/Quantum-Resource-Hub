@@ -61,8 +61,13 @@ const API = (() => {
     return res.json();
   };
 
+  /* Sheets without an id column leave r.id empty, which makes the card's
+     data-resource-id attribute blank and breaks the click→modal handler.
+     Synthesize a stable fallback so every card is always selectable. */
+  const withFallbackId = (r, i) => r.id ? r : { ...r, id: `r-${i + 1}` };
+
   return {
-    fetchResources: async () => (await get('getResources') || []).map(normalizeResource),
+    fetchResources: async () => (await get('getResources') || []).map(normalizeResource).map(withFallbackId),
     fetchComments:  async () => (await get('getComments')  || []).map(normalizeComment),
     addResource:    (data) => post({ action: 'addResource', ...data }),
     addComment:     (data) => post({ action: 'addComment',  ...data }),
