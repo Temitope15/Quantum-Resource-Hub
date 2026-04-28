@@ -155,6 +155,7 @@
 
   const init = async () => {
     wireEvents();
+    $('#year').textContent = new Date().getFullYear();
     UI.renderLoading();
     try {
       const [resources, comments] = await Promise.all([

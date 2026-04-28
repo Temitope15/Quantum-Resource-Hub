@@ -642,6 +642,19 @@ body::after {
   gap: 12px;
 }
 
+.colophon .heart {
+  color: var(--terracotta);
+  display: inline-block;
+  animation: heartbeat 2.4s ease-in-out infinite;
+  transform-origin: center;
+  margin: 0 2px;
+}
+
+@keyframes heartbeat {
+  0%, 40%, 100% { transform: scale(1); }
+  20%           { transform: scale(1.18); }
+}
+
 /* ── MODAL ─────────────────────────────────────── */
 .overlay {
   position: fixed;

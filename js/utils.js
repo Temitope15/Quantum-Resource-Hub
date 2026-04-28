@@ -46,5 +46,17 @@ const Utils = (() => {
   const catKey = (cat) => (cat || 'other').toLowerCase();
   const catClass = (cat) => `cat-${catKey(cat)}`;
 
-  return { $, $$, escapeHtml, timeAgo, padNum, debounce, catKey, catClass };
+  /* Coerce a freeform input into a usable absolute URL,
+     or return '' when the value clearly isn't a URL. */
+  const sanitizeUrl = (raw) => {
+    if (!raw) return '';
+    const s = String(raw).trim();
+    if (!s) return '';
+    if (/^https?:\/\//i.test(s)) return s;
+    if (/\s/.test(s)) return '';        // whitespace → not a URL
+    if (!/\./.test(s)) return '';       // no domain dot → not a URL
+    return `https://${s}`;
+  };
+
+  return { $, $$, escapeHtml, timeAgo, padNum, debounce, catKey, catClass, sanitizeUrl };
 })();

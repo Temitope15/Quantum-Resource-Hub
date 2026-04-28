@@ -4,7 +4,7 @@
    ================================================ */
 
 const UI = (() => {
-  const { $, $$, escapeHtml, timeAgo, padNum, catClass } = Utils;
+  const { $, $$, escapeHtml, timeAgo, padNum, catClass, sanitizeUrl } = Utils;
 
   /* ── ICONS (single source of truth) ───────────── */
   const icons = {
@@ -24,8 +24,6 @@ const UI = (() => {
       r.timestamp   ? timeAgo(r.timestamp) : '',
     ].filter(Boolean);
 
-    const hasUrl = r.url && r.url !== '#';
-
     return `
       <article class="card ${catClass(cat)}" style="animation-delay:${delay}s" data-resource-id="${escapeHtml(r.id)}">
         <header class="card-head">
@@ -39,9 +37,7 @@ const UI = (() => {
             ${meta.map((m, i) => i === 0 ? `<span>${m}</span>` : `<span class="sep"></span><span>${m}</span>`).join('')}
           </div>` : ''}
         <footer class="card-foot">
-          ${hasUrl
-            ? `<a class="card-link" href="${escapeHtml(r.url)}" target="_blank" rel="noopener" data-stop>View ${icons.arrow}</a>`
-            : `<span class="card-link" style="color:var(--muted); cursor:default;">No link</span>`}
+          <span class="card-link">View details ${icons.arrow}</span>
           <button class="card-comments" data-action="open-detail" data-resource-id="${escapeHtml(r.id)}">
             ${icons.chat} <strong>${commentCount}</strong> ${commentCount === 1 ? 'note' : 'notes'}
           </button>
@@ -121,8 +117,9 @@ const UI = (() => {
     }
 
     const openLink = $('#dOpen');
-    if (resource.url) {
-      openLink.href = resource.url;
+    const safeUrl = sanitizeUrl(resource.url);
+    if (safeUrl) {
+      openLink.href = safeUrl;
       openLink.style.display = '';
     } else {
       openLink.style.display = 'none';
