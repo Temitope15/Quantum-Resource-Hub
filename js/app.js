@@ -57,9 +57,9 @@
 
   const handleGridClick = (e) => {
     if (e.target.closest('[data-stop]')) return;
-    const trigger = e.target.closest('[data-action="open-detail"]') || e.target.closest('.card');
-    if (!trigger) return;
-    const id = trigger.dataset.resourceId;
+    const card = e.target.closest('.card[data-resource-id]');
+    if (!card) return;
+    const id = card.dataset.resourceId;
     if (id) openDetail(id);
   };
 
@@ -67,8 +67,13 @@
     const r = findResource(id);
     if (!r) return;
     state.activeResourceId = id;
-    UI.renderResourceDetail(r, indexOfResource(id), commentsFor(id));
+    /* Open first, render second — a render error must never block the modal */
     UI.openModal('detailOverlay');
+    try {
+      UI.renderResourceDetail(r, indexOfResource(id), commentsFor(id));
+    } catch (err) {
+      console.error('renderResourceDetail failed:', err);
+    }
   };
 
   const handleAddSubmit = async () => {

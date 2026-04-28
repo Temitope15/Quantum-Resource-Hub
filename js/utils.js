@@ -43,7 +43,13 @@ const Utils = (() => {
     };
   };
 
-  const catKey = (cat) => (cat || 'other').toLowerCase();
+  /* Only accept clean letters as a category key — anything else
+     (URLs, numbers, garbage from misaligned data) falls back to 'other'.
+     Keeps generated class names CSS-safe. */
+  const catKey = (cat) => {
+    const s = String(cat || '').toLowerCase().trim();
+    return /^[a-z]+$/.test(s) ? s : 'other';
+  };
   const catClass = (cat) => `cat-${catKey(cat)}`;
 
   /* Coerce a freeform input into a usable absolute URL,
