@@ -39,7 +39,7 @@ const UI = (() => {
         <footer class="card-foot">
           <span class="card-link">View details ${icons.arrow}</span>
           <button class="card-comments" data-action="open-detail" data-resource-id="${escapeHtml(r.id)}">
-            ${icons.chat} <strong>${commentCount}</strong> ${commentCount === 1 ? 'note' : 'notes'}
+            ${icons.chat} <strong>${commentCount}</strong> ${commentCount === 1 ? 'comment' : 'comments'}
           </button>
         </footer>
       </article>`;
@@ -48,9 +48,10 @@ const UI = (() => {
   const renderGrid = (resources, getCommentCount) => {
     const grid  = $('#grid');
     const count = $('#resultsCount');
+    if (!grid) return;
 
     if (!resources.length) {
-      count.textContent = '0 results';
+      if (count) count.textContent = '0 results';
       grid.innerHTML = `
         <div class="state-block">
           ${icons.empty}
@@ -60,22 +61,54 @@ const UI = (() => {
       return;
     }
 
-    count.textContent = `${resources.length} ${resources.length === 1 ? 'entry' : 'entries'}`;
+    if (count) count.textContent = `${resources.length} ${resources.length === 1 ? 'entry' : 'entries'}`;
     grid.innerHTML = resources.map((r, i) => cardHTML(r, i, getCommentCount(r.id))).join('');
   };
 
+  /* ── FEATURED (landing page) ───────────────────── */
+  const renderFeatured = (resources, getCommentCount, max = 6) => {
+    const grid = $('#featured-grid');
+    if (!grid) return;
+
+    if (!resources.length) {
+      grid.innerHTML = `
+        <div class="state-block">
+          ${icons.empty}
+          <h3>The archive is empty</h3>
+          <p>No resources yet — be the first to contribute one in the Library.</p>
+        </div>`;
+      return;
+    }
+
+    /* Most recent first when timestamps exist; otherwise preserve order. */
+    const sorted = [...resources].sort((a, b) => {
+      const ta = new Date(a.timestamp).getTime() || 0;
+      const tb = new Date(b.timestamp).getTime() || 0;
+      return tb - ta;
+    }).slice(0, max);
+
+    grid.innerHTML = sorted.map((r, i) => cardHTML(r, i, getCommentCount(r.id))).join('');
+  };
+
   const renderError = () => {
-    $('#resultsCount').textContent = 'Failed to load';
-    $('#grid').innerHTML = `
+    const count = $('#resultsCount');
+    const grid  = $('#grid');
+    const featured = $('#featured-grid');
+    const errBlock = `
       <div class="state-block">
         ${icons.err}
         <h3>Could not load resources</h3>
         <p>Check the Apps Script deployment — make sure access is set to <em>Anyone</em>.</p>
       </div>`;
+    if (count) count.textContent = 'Failed to load';
+    if (grid)  grid.innerHTML  = errBlock;
+    if (featured) featured.innerHTML = errBlock;
   };
 
   const renderLoading = () => {
-    $('#grid').innerHTML = `
+    const grid = $('#grid');
+    if (!grid) return;
+    grid.innerHTML = `
       <div class="state-block">
         <span class="spinner"></span>
         <span style="font-size:13px; letter-spacing:0.02em;">Fetching the archive…</span>
@@ -84,9 +117,12 @@ const UI = (() => {
 
   /* ── STATS ─────────────────────────────────────── */
   const renderStats = ({ total, comments, categories }) => {
-    $('#stat-total').textContent    = total;
-    $('#stat-comments').textContent = comments;
-    $('#stat-cats').textContent     = categories;
+    const t = $('#stat-total');
+    const c = $('#stat-comments');
+    const k = $('#stat-cats');
+    if (t) t.textContent = total;
+    if (c) c.textContent = comments;
+    if (k) k.textContent = categories;
   };
 
   /* ── RESOURCE DETAIL ───────────────────────────── */
@@ -133,7 +169,7 @@ const UI = (() => {
   const renderComments = (comments) => {
     const list = $('#commentsList');
     if (!comments.length) {
-      list.innerHTML = `<div class="no-comments">— no notes yet, be the first —</div>`;
+      list.innerHTML = `<div class="no-comments">— no comments yet, be the first —</div>`;
       return;
     }
     list.innerHTML = comments.map(c => `
@@ -212,7 +248,7 @@ const UI = (() => {
   };
 
   return {
-    renderGrid, renderError, renderLoading, renderStats,
+    renderGrid, renderFeatured, renderError, renderLoading, renderStats,
     renderResourceDetail, renderComments, updateNoteCount,
     openModal, closeModal, closeAllModals,
     readAddForm, clearAddForm,

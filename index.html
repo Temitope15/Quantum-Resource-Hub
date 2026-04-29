@@ -14,7 +14,7 @@
 
   <link rel="stylesheet" href="css/styles.css" />
 </head>
-<body>
+<body data-page="landing">
 
 <div class="page">
 
@@ -27,6 +27,21 @@
     </span>
   </div>
 
+  <!-- ═══ PRIMARY NAV ══════════════════════════════ -->
+  <nav class="primary-nav" aria-label="Primary">
+    <a class="brand" href="index.html">
+      <span class="brand-mark" aria-hidden="true"></span>
+      <span class="brand-name">Quantum<span class="brand-name-it">Hub</span></span>
+    </a>
+    <ul class="nav-links">
+      <li><a class="nav-link active" href="index.html">Home</a></li>
+      <li><a class="nav-link" href="library.html">Library</a></li>
+      <li><a class="nav-link" href="#join">Join</a></li>
+      <li><a class="nav-link" href="#contact">Contact</a></li>
+    </ul>
+    <a class="btn btn-primary nav-cta" href="library.html">Browse Library →</a>
+  </nav>
+
   <!-- ═══ MASTHEAD ═════════════════════════════════ -->
   <header class="masthead">
     <div>
@@ -38,8 +53,13 @@
       <p class="lede">
         A living index of <strong>papers, courses, tools and talks</strong> on quantum computing —
         contributed and annotated by the GDG OAU community. Browse, search, share, and
-        leave notes for the next reader.
+        leave comments for the next reader.
       </p>
+
+      <div class="hero-ctas">
+        <a class="btn btn-primary btn-lg" href="library.html">Open the Library →</a>
+        <a class="btn btn-ghost btn-lg" href="#join">Join the community</a>
+      </div>
     </div>
 
     <div class="masthead-aside">
@@ -65,43 +85,85 @@
 
       <div class="stats" role="group" aria-label="Archive statistics">
         <div class="stat"><div class="stat-num" id="stat-total">—</div><div class="stat-label">Resources</div></div>
-        <div class="stat"><div class="stat-num" id="stat-comments">—</div><div class="stat-label">Notes</div></div>
-        <div class="stat"><div class="stat-num" id="stat-cats">—</div><div class="stat-label">Topics</div></div>
+        <div class="stat"><div class="stat-num" id="stat-comments">—</div><div class="stat-label">Comments</div></div>
+        <div class="stat"><div class="stat-num" id="stat-cats">—</div><div class="stat-label">Categories</div></div>
       </div>
     </div>
   </header>
 
-  <!-- ═══ ACTION BAR ═══════════════════════════════ -->
-  <div class="actionbar">
-    <div class="search">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-      <input type="text" id="searchInput" placeholder="Search title, author, topic…" aria-label="Search resources" />
+  <!-- ═══ FEATURED ═════════════════════════════════ -->
+  <section class="featured" id="featured">
+    <div class="section-head">
+      <div class="section-num"><strong>01</strong> Featured from the Archive</div>
+      <a class="section-cta" href="library.html">View all <span class="arrow">→</span></a>
     </div>
+    <div class="featured-grid" id="featured-grid">
+      <div class="state-block">
+        <span class="spinner"></span>
+        <span style="font-size:13px; letter-spacing:0.02em;">Loading recent additions…</span>
+      </div>
+    </div>
+  </section>
 
-    <div class="chips" id="filterChips" role="group" aria-label="Filter by category">
-      <button class="chip active" data-filter="All">All</button>
-      <button class="chip" data-filter="Article">Article</button>
-      <button class="chip" data-filter="Video">Video</button>
-      <button class="chip" data-filter="Course">Course</button>
-      <button class="chip" data-filter="Paper">Paper</button>
-      <button class="chip" data-filter="Tool">Tool</button>
-      <button class="chip" data-filter="Book">Book</button>
-      <button class="chip" data-filter="Other">Other</button>
-    </div>
+  <!-- ═══ JOIN + CONTACT ═══════════════════════════ -->
+  <section class="community" id="community">
+    <div class="community-grid">
 
-    <div style="display:flex; gap:10px;">
-      <button class="btn btn-ghost" id="refreshBtn" title="Reload archive">↻ Refresh</button>
-      <button class="btn btn-primary" id="openAddBtn">+ Contribute</button>
-    </div>
-  </div>
+      <!-- JOIN -->
+      <div class="cs-card" id="join">
+        <div class="cs-tag">Coming Soon</div>
+        <div class="section-num"><strong>02</strong> Join the Community</div>
+        <h2 class="cs-title">Become a <em>member</em>.</h2>
+        <p class="cs-desc">
+          New-member registration is launching shortly. Sign up to contribute resources,
+          leave comments, and get pinged when fresh material lands in the archive.
+        </p>
 
-  <!-- ═══ RESULTS ══════════════════════════════════ -->
-  <section>
-    <div class="results-header">
-      <div class="section-num"><strong>01</strong> The Archive</div>
-      <div class="results-count" id="resultsCount">Loading…</div>
+        <form class="cs-form" aria-disabled="true" onsubmit="event.preventDefault();">
+          <div class="field">
+            <label>Full name</label>
+            <input type="text" placeholder="Ada Lovelace" disabled />
+          </div>
+          <div class="field">
+            <label>Email</label>
+            <input type="email" placeholder="you@example.com" disabled />
+          </div>
+          <div class="field">
+            <label>Affiliation</label>
+            <input type="text" placeholder="OAU · Department · Year" disabled />
+          </div>
+          <button type="button" class="submit-btn" disabled>Coming soon →</button>
+        </form>
+      </div>
+
+      <!-- CONTACT -->
+      <div class="cs-card" id="contact">
+        <div class="cs-tag">Coming Soon</div>
+        <div class="section-num"><strong>03</strong> Contact Us</div>
+        <h2 class="cs-title">Get in <em>touch</em>.</h2>
+        <p class="cs-desc">
+          Got a question, partnership idea, or feedback for the archive? A proper
+          contact channel is being wired up — for now, this section is a placeholder.
+        </p>
+
+        <form class="cs-form" aria-disabled="true" onsubmit="event.preventDefault();">
+          <div class="field">
+            <label>Your name</label>
+            <input type="text" placeholder="Anonymous" disabled />
+          </div>
+          <div class="field">
+            <label>Subject</label>
+            <input type="text" placeholder="What's this about?" disabled />
+          </div>
+          <div class="field">
+            <label>Message</label>
+            <textarea placeholder="Tell us what's on your mind…" disabled></textarea>
+          </div>
+          <button type="button" class="submit-btn" disabled>Coming soon →</button>
+        </form>
+      </div>
+
     </div>
-    <div class="grid" id="grid"></div>
   </section>
 
   <!-- ═══ COLOPHON ═════════════════════════════════ -->
@@ -113,109 +175,6 @@
 </div><!-- /.page -->
 
 
-<!-- ═══ ADD MODAL ══════════════════════════════════ -->
-<div class="overlay" id="addOverlay" role="dialog" aria-modal="true" aria-labelledby="addModalTitle">
-  <div class="modal">
-    <div class="modal-head">
-      <div class="modal-eyebrow">Contribute</div>
-      <h2 class="modal-title" id="addModalTitle">Add a resource <em>to the archive</em></h2>
-      <button class="modal-close" data-close="addOverlay" aria-label="Close">✕</button>
-    </div>
-
-    <div class="modal-body">
-      <div class="field">
-        <label for="f-title">Title <span class="req">*</span></label>
-        <input type="text" id="f-title" placeholder="e.g. IBM Quantum Learning Path" />
-      </div>
-
-      <div class="field">
-        <label for="f-url">URL / Link <span class="req">*</span></label>
-        <input type="url" id="f-url" placeholder="https://…" />
-      </div>
-
-      <div class="field-row">
-        <div class="field">
-          <label for="f-cat">Category <span class="req">*</span></label>
-          <select id="f-cat">
-            <option value="">— Select —</option>
-            <option>Article</option>
-            <option>Video</option>
-            <option>Course</option>
-            <option>Paper</option>
-            <option>Tool</option>
-            <option>Book</option>
-            <option>Other</option>
-          </select>
-        </div>
-        <div class="field">
-          <label for="f-name">Your name</label>
-          <input type="text" id="f-name" placeholder="Anonymous" />
-        </div>
-      </div>
-
-      <div class="field">
-        <label for="f-desc">Description</label>
-        <textarea id="f-desc" placeholder="What does this resource cover and why is it worth reading?"></textarea>
-      </div>
-
-      <button class="submit-btn" id="addSubmitBtn">→ Submit Resource</button>
-    </div>
-  </div>
-</div>
-
-
-<!-- ═══ RESOURCE DETAIL MODAL ══════════════════════ -->
-<div class="overlay" id="detailOverlay" role="dialog" aria-modal="true" aria-labelledby="detailTitle">
-  <div class="modal modal-lg">
-    <button class="modal-close" data-close="detailOverlay" aria-label="Close">✕</button>
-
-    <div class="detail">
-      <div class="detail-head">
-        <span class="detail-num" id="dNum">№ 001</span>
-        <span class="detail-cat" id="dCat">Other</span>
-      </div>
-
-      <h2 class="detail-title" id="detailTitle">—</h2>
-
-      <div class="detail-meta" id="dMeta"></div>
-
-      <p class="detail-desc" id="dDesc"></p>
-
-      <a class="detail-open" id="dOpen" href="#" target="_blank" rel="noopener">
-        <span>Open resource</span>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg>
-      </a>
-    </div>
-
-    <hr class="divider" />
-
-    <div class="detail-notes">
-      <div class="notes-header">
-        <span class="section-tag">Community Notes</span>
-        <span class="notes-count" id="dNoteCount">0</span>
-      </div>
-
-      <div class="comments-list" id="commentsList"></div>
-
-      <hr class="divider divider-soft" />
-
-      <div class="section-tag">Leave a Note</div>
-
-      <div class="field">
-        <label for="c-name">Your name</label>
-        <input type="text" id="c-name" placeholder="Anonymous" />
-      </div>
-      <div class="field">
-        <label for="c-text">Note <span class="req">*</span></label>
-        <textarea id="c-text" placeholder="e.g. Link is dead — try this mirror instead: https://…"></textarea>
-      </div>
-
-      <button class="submit-btn" id="commentSubmitBtn">Post Note</button>
-    </div>
-  </div>
-</div>
-
-
 <!-- ═══ TOAST ═════════════════════════════════════ -->
 <div class="toast" id="toast" role="status" aria-live="polite">
   <span class="toast-icon" id="toastIcon">✓</span>
@@ -223,7 +182,7 @@
 </div>
 
 
-<!-- ═══ SCRIPTS — order matters: utils → api → ui → app ═══ -->
+<!-- ═══ SCRIPTS ═══ -->
 <script src="js/utils.js"></script>
 <script src="js/api.js"></script>
 <script src="js/ui.js"></script>

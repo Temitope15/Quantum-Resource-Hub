@@ -133,6 +133,87 @@ body::after {
 .ribbon-meta span { display: inline-flex; align-items: center; gap: 6px; }
 .ribbon-meta .dot { width: 4px; height: 4px; border-radius: 50%; background: var(--moss); }
 
+/* ── PRIMARY NAV ───────────────────────────────── */
+.primary-nav {
+  padding: 16px var(--pad-x);
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  border-bottom: 1px solid var(--line);
+  background: rgba(246, 243, 236, 0.92);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  position: sticky;
+  top: 0;
+  z-index: 60;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: 18px;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  font-variation-settings: "opsz" 24;
+  flex: 0 0 auto;
+}
+
+.brand-mark {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--cobalt);
+  box-shadow:
+    0 0 0 3px var(--paper),
+    0 0 0 4px var(--cobalt),
+    inset 0 0 0 4px var(--paper);
+  display: inline-block;
+}
+
+.brand-name-it {
+  font-style: italic;
+  font-weight: 300;
+  color: var(--cobalt);
+  margin-left: 1px;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 4px;
+  margin: 0 auto;
+  padding: 0;
+}
+
+.nav-link {
+  font-size: 13px;
+  letter-spacing: 0.02em;
+  font-weight: 500;
+  color: var(--ink-soft);
+  padding: 8px 14px;
+  border-radius: 100px;
+  transition: all var(--fast);
+  display: inline-block;
+}
+
+.nav-link:hover { color: var(--ink); background: var(--paper-warm); }
+
+.nav-link.active {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.nav-cta { flex: 0 0 auto; }
+
+@media (max-width: 720px) {
+  .primary-nav { gap: 12px; flex-wrap: wrap; }
+  .nav-links { order: 3; width: 100%; justify-content: center; margin: 0; }
+  .nav-cta { margin-left: auto; }
+}
+
 /* ── HERO / MASTHEAD ───────────────────────────── */
 .masthead {
   padding: clamp(40px, 7vw, 80px) var(--pad-x) clamp(36px, 5vw, 56px);
@@ -262,21 +343,195 @@ body::after {
   font-weight: 500;
 }
 
+/* ── HERO CTAs ─────────────────────────────────── */
+.hero-ctas {
+  margin-top: 32px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.btn-lg {
+  padding: 13px 22px;
+  font-size: 14px;
+  letter-spacing: 0.01em;
+}
+
+/* ── LIBRARY HEADER ────────────────────────────── */
+.library-header {
+  padding: clamp(36px, 5vw, 60px) var(--pad-x) clamp(28px, 4vw, 40px);
+  border-bottom: 1px solid var(--line);
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  gap: clamp(24px, 4vw, 48px);
+  align-items: end;
+}
+
+.library-title {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(38px, 6vw, 72px);
+  line-height: 0.98;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  font-variation-settings: "opsz" 144, "SOFT" 30;
+}
+
+.library-title .it { font-style: italic; font-weight: 300; color: var(--cobalt); }
+.library-title .amp { font-style: italic; color: var(--terracotta); font-weight: 300; }
+
+.library-lede {
+  margin-top: 18px;
+  font-family: var(--serif);
+  font-size: clamp(15px, 1.5vw, 17.5px);
+  font-weight: 300;
+  line-height: 1.55;
+  color: var(--ink-soft);
+  max-width: 52ch;
+  font-variation-settings: "opsz" 14;
+}
+
+.stats-compact { justify-self: end; }
+
+@media (max-width: 880px) {
+  .library-header { grid-template-columns: 1fr; gap: 28px; align-items: start; }
+  .stats-compact { justify-self: start; }
+}
+
+/* ── FEATURED ──────────────────────────────────── */
+.featured {
+  padding: clamp(40px, 6vw, 72px) var(--pad-x) 16px;
+}
+
+.section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.section-cta {
+  font-size: 13px;
+  letter-spacing: 0.02em;
+  font-weight: 600;
+  color: var(--cobalt);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: gap var(--fast);
+}
+.section-cta:hover { gap: 12px; }
+.section-cta .arrow { transition: transform var(--fast); }
+.section-cta:hover .arrow { transform: translateX(2px); }
+
+.featured-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+  gap: 18px;
+}
+
+/* Featured cards reuse .card styles via JS — no extra rules needed */
+
+/* ── COMMUNITY (Join + Contact) ────────────────── */
+.community {
+  padding: clamp(48px, 7vw, 88px) var(--pad-x) clamp(48px, 7vw, 88px);
+}
+
+.community-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 24px;
+}
+
+.cs-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: 36px 36px 32px;
+  position: relative;
+  overflow: hidden;
+  scroll-margin-top: 100px;
+}
+
+.cs-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--cobalt), var(--terracotta));
+  opacity: 0.7;
+}
+
+.cs-tag {
+  display: inline-block;
+  font-size: 10.5px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--terracotta);
+  background: rgba(211, 90, 61, 0.1);
+  border: 1px solid rgba(211, 90, 61, 0.25);
+  padding: 5px 11px;
+  border-radius: 100px;
+  margin-bottom: 18px;
+}
+
+.cs-title {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(32px, 4.5vw, 44px);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  font-variation-settings: "opsz" 48;
+  margin: 8px 0 14px;
+}
+
+.cs-title em { font-style: italic; font-weight: 300; color: var(--cobalt); }
+
+.cs-desc {
+  font-family: var(--serif);
+  font-size: 15.5px;
+  font-weight: 300;
+  line-height: 1.6;
+  color: var(--ink-soft);
+  font-variation-settings: "opsz" 14;
+  margin-bottom: 24px;
+  max-width: 48ch;
+}
+
+.cs-form .field input:disabled,
+.cs-form .field textarea:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  background: var(--paper);
+}
+
+.cs-form .submit-btn:disabled {
+  background: var(--ink-soft);
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+@media (max-width: 640px) {
+  .cs-card { padding: 28px 24px 26px; }
+}
+
 /* ── ACTION BAR ────────────────────────────────── */
 .actionbar {
-  padding: 24px var(--pad-x);
+  padding: 20px var(--pad-x);
   display: flex;
   flex-wrap: wrap;
   gap: 14px 18px;
   align-items: center;
   justify-content: space-between;
   border-bottom: 1px solid var(--line);
-  position: sticky;
-  top: 0;
-  background: rgba(246, 243, 236, 0.92);
+  background: rgba(246, 243, 236, 0.85);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  z-index: 50;
 }
 
 .search {

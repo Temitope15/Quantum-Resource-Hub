@@ -1,9 +1,17 @@
 /* ================================================
    app.js  —  state, init, event wiring (the glue)
+
+   Page-aware: the same script powers both index.html
+   (landing) and library.html (full archive). Each
+   render/wire step no-ops when its target element
+   isn't on the current page.
    ================================================ */
 
 (() => {
   const { $, debounce, catKey } = Utils;
+
+  const page = document.body.dataset.page || 'library';
+  const isLanding = page === 'landing';
 
   const state = {
     resources: [],
@@ -38,7 +46,10 @@
   });
 
   /* ── RENDER PIPELINE ───────────────────────────── */
-  const refreshGrid = () => UI.renderGrid(visibleResources(), commentCountFor);
+  const refreshGrid = () => {
+    if (isLanding) UI.renderFeatured(state.resources, commentCountFor);
+    else           UI.renderGrid(visibleResources(), commentCountFor);
+  };
   const refreshAll  = () => { UI.renderStats(computeStats()); refreshGrid(); };
 
   /* ── HANDLERS ──────────────────────────────────── */
@@ -55,12 +66,20 @@
     refreshGrid();
   };
 
-  const handleGridClick = (e) => {
+  /* On the library page, opening a card opens the detail modal.
+     On the landing page, no modal exists — deep-link to library.html. */
+  const handleCardClick = (e) => {
     if (e.target.closest('[data-stop]')) return;
     const card = e.target.closest('.card[data-resource-id]');
     if (!card) return;
     const id = card.dataset.resourceId;
-    if (id) openDetail(id);
+    if (!id) return;
+
+    if (isLanding) {
+      window.location.href = `library.html?open=${encodeURIComponent(id)}`;
+      return;
+    }
+    openDetail(id);
   };
 
   const openDetail = (id) => {
@@ -122,25 +141,31 @@
         UI.renderComments(list);
         UI.updateNoteCount(list.length);
         refreshAll();
-        UI.toast('Note posted.', true);
+        UI.toast('Comment posted.', true);
       } else {
         UI.toast(res.error || 'Could not post comment.', false);
       }
     } catch {
       UI.toast('Network error. Check connection.', false);
     } finally {
-      UI.setBusy('commentSubmitBtn', false, 'Post Note');
+      UI.setBusy('commentSubmitBtn', false, 'Post Comment');
     }
   };
 
   /* ── INIT ──────────────────────────────────────── */
-  const wireEvents = () => {
-    $('#searchInput').addEventListener('input', handleSearch);
-    $('#filterChips').addEventListener('click', handleFilterClick);
-    $('#grid').addEventListener('click', handleGridClick);
+  const on = (sel, evt, fn) => {
+    const el = $(sel);
+    if (el) el.addEventListener(evt, fn);
+  };
 
-    $('#openAddBtn').addEventListener('click', () => UI.openModal('addOverlay'));
-    $('#refreshBtn').addEventListener('click', () => location.reload());
+  const wireEvents = () => {
+    on('#searchInput', 'input', handleSearch);
+    on('#filterChips', 'click', handleFilterClick);
+    on('#grid',          'click', handleCardClick);
+    on('#featured-grid', 'click', handleCardClick);
+
+    on('#openAddBtn', 'click', () => UI.openModal('addOverlay'));
+    on('#refreshBtn', 'click', () => location.reload());
 
     document.addEventListener('click', (e) => {
       const closeBtn = e.target.closest('[data-close]');
@@ -150,17 +175,28 @@
       if (overlay) UI.closeModal(overlay.id);
     });
 
-    $('#addSubmitBtn').addEventListener('click', handleAddSubmit);
-    $('#commentSubmitBtn').addEventListener('click', handleCommentSubmit);
+    on('#addSubmitBtn',     'click', handleAddSubmit);
+    on('#commentSubmitBtn', 'click', handleCommentSubmit);
 
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') UI.closeAllModals();
     });
   };
 
+  /* If we landed here from a featured-card click on the landing page,
+     auto-open that resource's detail modal. */
+  const maybeAutoOpenFromQuery = () => {
+    if (isLanding) return;
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get('open');
+    if (id && findResource(id)) openDetail(id);
+  };
+
   const init = async () => {
     wireEvents();
-    $('#year').textContent = new Date().getFullYear();
+    const yearEl = $('#year');
+    if (yearEl) yearEl.textContent = new Date().getFullYear();
+
     UI.renderLoading();
     try {
       const [resources, comments] = await Promise.all([
@@ -170,6 +206,7 @@
       state.resources = resources || [];
       state.comments  = comments  || [];
       refreshAll();
+      maybeAutoOpenFromQuery();
     } catch (err) {
       console.error(err);
       UI.renderError();

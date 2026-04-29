@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Library · Quantum Resource Hub</title>
+  <meta name="description" content="The full library of quantum computing resources — curated by the GDG OAU Quantum Computing Community." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300..700&family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..700,30..100;1,9..144,300..700,30..100&display=swap"
+    rel="stylesheet">
+
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body data-page="library">
+
+<div class="page">
+
+  <!-- ═══ TOP RIBBON ═══════════════════════════════ -->
+  <div class="ribbon">
+    <span class="ribbon-mark">GDG OAU · Quantum Computing Community</span>
+    <span class="ribbon-meta">
+      <span class="hide-sm"><span class="dot"></span> Community archive · v1.0</span>
+      <span>Est. 2026</span>
+    </span>
+  </div>
+
+  <!-- ═══ PRIMARY NAV ══════════════════════════════ -->
+  <nav class="primary-nav" aria-label="Primary">
+    <a class="brand" href="index.html">
+      <span class="brand-mark" aria-hidden="true"></span>
+      <span class="brand-name">Quantum<span class="brand-name-it">Hub</span></span>
+    </a>
+    <ul class="nav-links">
+      <li><a class="nav-link" href="index.html">Home</a></li>
+      <li><a class="nav-link active" href="library.html">Library</a></li>
+      <li><a class="nav-link" href="index.html#join">Join</a></li>
+      <li><a class="nav-link" href="index.html#contact">Contact</a></li>
+    </ul>
+    <button class="btn btn-primary nav-cta" id="openAddBtn">+ Contribute</button>
+  </nav>
+
+  <!-- ═══ LIBRARY HEADER ═══════════════════════════ -->
+  <header class="library-header">
+    <div>
+      <div class="eyebrow">The Archive</div>
+      <h1 class="library-title">
+        Browse the <span class="it">library</span><span class="amp">.</span>
+      </h1>
+      <p class="library-lede">
+        Every paper, course, tool and talk contributed by the community —
+        searchable, sortable, and open to your comments.
+      </p>
+    </div>
+
+    <div class="stats stats-compact" role="group" aria-label="Archive statistics">
+      <div class="stat"><div class="stat-num" id="stat-total">—</div><div class="stat-label">Resources</div></div>
+      <div class="stat"><div class="stat-num" id="stat-comments">—</div><div class="stat-label">Comments</div></div>
+      <div class="stat"><div class="stat-num" id="stat-cats">—</div><div class="stat-label">Categories</div></div>
+    </div>
+  </header>
+
+  <!-- ═══ ACTION BAR ═══════════════════════════════ -->
+  <div class="actionbar">
+    <div class="search">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input type="text" id="searchInput" placeholder="Search title, author, topic…" aria-label="Search resources" />
+    </div>
+
+    <div class="chips" id="filterChips" role="group" aria-label="Filter by category">
+      <button class="chip active" data-filter="All">All</button>
+      <button class="chip" data-filter="Article">Article</button>
+      <button class="chip" data-filter="Video">Video</button>
+      <button class="chip" data-filter="Course">Course</button>
+      <button class="chip" data-filter="Paper">Paper</button>
+      <button class="chip" data-filter="Tool">Tool</button>
+      <button class="chip" data-filter="Book">Book</button>
+      <button class="chip" data-filter="Other">Other</button>
+    </div>
+
+    <div style="display:flex; gap:10px;">
+      <button class="btn btn-ghost" id="refreshBtn" title="Reload archive">↻ Refresh</button>
+    </div>
+  </div>
+
+  <!-- ═══ RESULTS ══════════════════════════════════ -->
+  <section>
+    <div class="results-header">
+      <div class="section-num"><strong>01</strong> The Archive</div>
+      <div class="results-count" id="resultsCount">Loading…</div>
+    </div>
+    <div class="grid" id="grid"></div>
+  </section>
+
+  <!-- ═══ COLOPHON ═════════════════════════════════ -->
+  <footer class="colophon">
+    <span>© <span id="year">2026</span> GDG OAU Quantum Computing Community · All rights reserved</span>
+    <span>Built with <span class="heart" aria-label="love">♥</span> · Open contributions welcome</span>
+  </footer>
+
+</div><!-- /.page -->
+
+
+<!-- ═══ ADD MODAL ══════════════════════════════════ -->
+<div class="overlay" id="addOverlay" role="dialog" aria-modal="true" aria-labelledby="addModalTitle">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-eyebrow">Contribute</div>
+      <h2 class="modal-title" id="addModalTitle">Add a resource <em>to the archive</em></h2>
+      <button class="modal-close" data-close="addOverlay" aria-label="Close">✕</button>
+    </div>
+
+    <div class="modal-body">
+      <div class="field">
+        <label for="f-title">Title <span class="req">*</span></label>
+        <input type="text" id="f-title" placeholder="e.g. IBM Quantum Learning Path" />
+      </div>
+
+      <div class="field">
+        <label for="f-url">URL / Link <span class="req">*</span></label>
+        <input type="url" id="f-url" placeholder="https://…" />
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label for="f-cat">Category <span class="req">*</span></label>
+          <select id="f-cat">
+            <option value="">— Select —</option>
+            <option>Article</option>
+            <option>Video</option>
+            <option>Course</option>
+            <option>Paper</option>
+            <option>Tool</option>
+            <option>Book</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="f-name">Your name</label>
+          <input type="text" id="f-name" placeholder="Anonymous" />
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="f-desc">Description</label>
+        <textarea id="f-desc" placeholder="What does this resource cover and why is it worth reading?"></textarea>
+      </div>
+
+      <button class="submit-btn" id="addSubmitBtn">→ Submit Resource</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══ RESOURCE DETAIL MODAL ══════════════════════ -->
+<div class="overlay" id="detailOverlay" role="dialog" aria-modal="true" aria-labelledby="detailTitle">
+  <div class="modal modal-lg">
+    <button class="modal-close" data-close="detailOverlay" aria-label="Close">✕</button>
+
+    <div class="detail">
+      <div class="detail-head">
+        <span class="detail-num" id="dNum">№ 001</span>
+        <span class="detail-cat" id="dCat">Other</span>
+      </div>
+
+      <h2 class="detail-title" id="detailTitle">—</h2>
+
+      <div class="detail-meta" id="dMeta"></div>
+
+      <p class="detail-desc" id="dDesc"></p>
+
+      <a class="detail-open" id="dOpen" href="#" target="_blank" rel="noopener">
+        <span>Open resource</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg>
+      </a>
+    </div>
+
+    <hr class="divider" />
+
+    <div class="detail-notes">
+      <div class="notes-header">
+        <span class="section-tag">Community Comments</span>
+        <span class="notes-count" id="dNoteCount">0</span>
+      </div>
+
+      <div class="comments-list" id="commentsList"></div>
+
+      <hr class="divider divider-soft" />
+
+      <div class="section-tag">Leave a Comment</div>
+
+      <div class="field">
+        <label for="c-name">Your name</label>
+        <input type="text" id="c-name" placeholder="Anonymous" />
+      </div>
+      <div class="field">
+        <label for="c-text">Comment <span class="req">*</span></label>
+        <textarea id="c-text" placeholder="e.g. Link is dead — try this mirror instead: https://…"></textarea>
+      </div>
+
+      <button class="submit-btn" id="commentSubmitBtn">Post Comment</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══ TOAST ═════════════════════════════════════ -->
+<div class="toast" id="toast" role="status" aria-live="polite">
+  <span class="toast-icon" id="toastIcon">✓</span>
+  <span id="toastMsg">Done.</span>
+</div>
+
+
+<!-- ═══ SCRIPTS — order matters: utils → api → ui → app ═══ -->
+<script src="js/utils.js"></script>
+<script src="js/api.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/app.js"></script>
+
+</body>
+</html>
