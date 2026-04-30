@@ -1323,6 +1323,7 @@ body::before {
   align-items: center;
   margin-bottom: 18px;
   gap: 12px;
+  padding-right: 48px; /* clear the absolutely-positioned close button */
 }
 
 .detail-num {
@@ -1389,12 +1390,12 @@ body::before {
 .detail-open {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
+  gap: 9px;
   background: var(--ink);
   color: var(--bg);
-  padding: 13px 22px;
+  padding: 11px 20px;
   border-radius: 100px;
-  font-size: 14px;
+  font-size: 13.5px;
   font-weight: 500;
   transition: all var(--fast);
 }
@@ -1485,21 +1486,34 @@ body::before {
 .submit-btn:disabled { opacity: 0.5; cursor: wait; transform: none; }
 
 /* ── COMMENTS / NOTES SECTION ──────────────────── */
-.detail-notes { padding: 0 40px 36px; }
+/* Tinted "drawer" under the resource so the resource clearly stays primary. */
+.detail-notes {
+  padding: 24px 40px 32px;
+  background: var(--surface-warm);
+  border-top: 1px solid var(--line);
+}
 
 .notes-header {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   margin-bottom: 14px;
 }
 
+.notes-header .section-tag {
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  margin-bottom: 0;
+  color: var(--ink-soft);
+}
+
 .notes-count {
-  font-size: 11px;
+  font-size: 10.5px;
   font-weight: 700;
-  background: var(--accent-soft);
+  background: var(--surface);
   color: var(--accent-deep);
-  padding: 2px 9px;
+  border: 1px solid var(--line);
+  padding: 1px 8px;
   border-radius: 100px;
   letter-spacing: 0.04em;
 }
@@ -1507,18 +1521,18 @@ body::before {
 .comments-list {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  margin-bottom: 24px;
-  max-height: 280px;
+  gap: 10px;
+  margin-bottom: 20px;
+  max-height: 240px;
   overflow-y: auto;
   padding-right: 4px;
 }
 
 .comment {
-  background: var(--bg);
+  background: var(--surface);
   border: 1px solid var(--line);
   border-radius: var(--radius-sm);
-  padding: 14px 16px;
+  padding: 12px 14px;
 }
 
 .comment-head {
@@ -1559,13 +1573,41 @@ body::before {
 
 .divider {
   border: none;
-  border-top: 1px solid var(--line);
+  /* The tinted .detail-notes section already provides visual separation. */
   margin: 0;
+  height: 0;
 }
 
 .divider-soft {
+  border: none;
   border-top: 1px dashed var(--line);
-  margin: 22px 0;
+  margin: 18px 0;
+}
+
+.detail-notes .section-tag {
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  color: var(--ink-soft);
+  margin-bottom: 10px;
+}
+
+/* Compact form fields inside the notes drawer. */
+.detail-notes .field { margin-bottom: 12px; }
+.detail-notes .field label {
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  margin-bottom: 6px;
+}
+.detail-notes .field input,
+.detail-notes .field textarea {
+  background: var(--surface);
+  padding: 10px 12px;
+  font-size: 14px;
+}
+.detail-notes .field textarea { min-height: 80px; }
+.detail-notes .submit-btn {
+  padding: 12px 20px;
+  font-size: 13.5px;
 }
 
 .section-tag {
@@ -1655,14 +1697,59 @@ body::before {
   .actionbar { padding: 14px 16px; top: 50px; }
   .chips { justify-content: flex-start; }
   .field-row { grid-template-columns: 1fr; }
-  .modal-head, .modal-body { padding-left: 24px; padding-right: 24px; }
-  .detail { padding: 32px 24px 24px; }
-  .detail-notes { padding: 0 24px 32px; }
-  .modal-title { font-size: 24px; }
+  .modal-head { padding: 26px 22px 18px; }
+  .modal-body { padding: 22px 22px 26px; }
+  .modal-title { font-size: 22px; padding-right: 36px; }
   .stat { padding: 14px 18px; min-width: 84px; }
   .stat-num { font-size: 26px; }
   .toast { left: 16px; right: 16px; bottom: 16px; }
   .event-image { height: 140px; }
+
+  /* ── Bottom-sheet modal on mobile ───────────────
+     Modal docks to the bottom of the viewport with rounded
+     top corners — clearer hierarchy and easier thumb reach. */
+  .overlay { padding: 0; align-items: flex-end; }
+
+  .modal {
+    border-radius: 18px 18px 0 0;
+    max-width: 100%;
+    max-height: 92vh;
+    transform: translateY(100%);
+  }
+  .overlay.open .modal { transform: translateY(0); }
+
+  /* Drag-handle indicator at the top of the sheet */
+  .modal::before {
+    content: '';
+    display: block;
+    width: 40px;
+    height: 4px;
+    margin: 12px auto 4px;
+    background: var(--line);
+    border-radius: 100px;
+  }
+
+  /* The resource pane: more breathing room, less to the comments */
+  .detail {
+    padding: 18px 22px 24px;
+  }
+  .detail-title { font-size: 24px; padding-right: 36px; }
+  .detail-desc { font-size: 15px; margin-bottom: 22px; }
+
+  /* Comments drawer: reduced padding so it doesn't dominate */
+  .detail-notes {
+    padding: 20px 22px 28px;
+  }
+  .comments-list { max-height: 180px; }
+
+  /* Close button stays anchored at the sheet's top corner */
+  .modal-close {
+    top: 14px;
+    right: 14px;
+    width: 32px;
+    height: 32px;
+    background: var(--surface-warm);
+  }
 }
 
 @media (max-width: 420px) {
