@@ -36,15 +36,15 @@
     <ul class="nav-links">
       <li><a class="nav-link active" href="index.html">Home</a></li>
       <li><a class="nav-link" href="library.html">Library</a></li>
+      <li><a class="nav-link" href="#events">Events</a></li>
       <li><a class="nav-link" href="#join">Join</a></li>
-      <li><a class="nav-link" href="#contact">Contact</a></li>
     </ul>
     <a class="btn btn-primary nav-cta" href="library.html">Browse Library →</a>
   </nav>
 
   <!-- ═══ MASTHEAD ═════════════════════════════════ -->
   <header class="masthead">
-    <div>
+    <div class="reveal in">
       <div class="eyebrow">A Community Archive</div>
       <h1 class="headline">
         Quantum<br>
@@ -62,24 +62,65 @@
       </div>
     </div>
 
-    <div class="masthead-aside">
-      <!-- Decorative quantum orbital -->
-      <div class="orbital" aria-hidden="true">
-        <svg viewBox="0 0 220 220" fill="none">
+    <div class="masthead-aside reveal delay-2">
+      <!-- Animated quantum atom illustration -->
+      <div class="hero-art" aria-hidden="true">
+        <svg viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
           <defs>
-            <radialGradient id="coreGrad" cx="50%" cy="50%" r="50%">
-              <stop offset="0%"  stop-color="#2545d6" stop-opacity="0.9"/>
-              <stop offset="100%" stop-color="#2545d6" stop-opacity="0"/>
+            <radialGradient id="coreGlow" cx="50%" cy="50%" r="50%">
+              <stop offset="0%"  stop-color="#b8451f" stop-opacity="0.95"/>
+              <stop offset="60%" stop-color="#b8451f" stop-opacity="0.25"/>
+              <stop offset="100%" stop-color="#b8451f" stop-opacity="0"/>
+            </radialGradient>
+            <radialGradient id="atomBg" cx="50%" cy="50%" r="50%">
+              <stop offset="0%"  stop-color="#fbf7ee" stop-opacity="1"/>
+              <stop offset="100%" stop-color="#f4ecdb" stop-opacity="0.4"/>
             </radialGradient>
           </defs>
-          <ellipse class="ring"   cx="110" cy="110" rx="100" ry="40" stroke="#0c1330" stroke-width="0.8" stroke-opacity="0.5"/>
-          <ellipse class="ring ring-2" cx="110" cy="110" rx="100" ry="40" stroke="#2545d6" stroke-width="0.8" stroke-opacity="0.6" transform="rotate(60 110 110)"/>
-          <ellipse class="ring ring-3" cx="110" cy="110" rx="100" ry="40" stroke="#d35a3d" stroke-width="0.8" stroke-opacity="0.5" transform="rotate(120 110 110)"/>
-          <circle cx="110" cy="110" r="48" fill="url(#coreGrad)"/>
-          <circle class="core" cx="110" cy="110" r="6" fill="#2545d6"/>
-          <circle cx="210" cy="110" r="3" fill="#0c1330"/>
-          <circle cx="60"  cy="180" r="2.5" fill="#d35a3d"/>
-          <circle cx="160" cy="40"  r="2.5" fill="#d99411"/>
+
+          <!-- Soft background disc -->
+          <circle cx="200" cy="200" r="180" fill="url(#atomBg)" />
+          <circle cx="200" cy="200" r="180" stroke="#e8dfca" stroke-width="1" fill="none" stroke-dasharray="2 4"/>
+
+          <!-- Orbital rings (static rotation wrapper + animated inner group) -->
+          <g class="atom-ring">
+            <ellipse cx="200" cy="200" rx="150" ry="55" stroke="#1e3a5f" stroke-width="1.2" stroke-opacity="0.5"/>
+          </g>
+          <g transform="rotate(60 200 200)">
+            <g class="atom-ring r2">
+              <ellipse cx="200" cy="200" rx="150" ry="55" stroke="#b8451f" stroke-width="1.2" stroke-opacity="0.55"/>
+            </g>
+          </g>
+          <g transform="rotate(120 200 200)">
+            <g class="atom-ring r3">
+              <ellipse cx="200" cy="200" rx="150" ry="55" stroke="#2d5a3f" stroke-width="1.2" stroke-opacity="0.5"/>
+            </g>
+          </g>
+
+          <!-- Glow + core -->
+          <circle cx="200" cy="200" r="80" fill="url(#coreGlow)"/>
+          <circle class="atom-core" cx="200" cy="200" r="14" fill="#b8451f"/>
+          <circle cx="200" cy="200" r="22" stroke="#b8451f" stroke-width="1" fill="none" stroke-opacity="0.4"/>
+
+          <!-- Orbiting electrons (static rotation wrapper + animated inner group) -->
+          <g class="atom-electron">
+            <circle cx="350" cy="200" r="6" fill="#1e3a5f"/>
+          </g>
+          <g transform="rotate(60 200 200)">
+            <g class="atom-electron e2">
+              <circle cx="350" cy="200" r="5" fill="#2d5a3f"/>
+            </g>
+          </g>
+          <g transform="rotate(120 200 200)">
+            <g class="atom-electron e3">
+              <circle cx="350" cy="200" r="5" fill="#b08240"/>
+            </g>
+          </g>
+
+          <!-- Decorative dots -->
+          <circle cx="80"  cy="120" r="2" fill="#b08240" opacity="0.6"/>
+          <circle cx="320" cy="320" r="2.5" fill="#1e3a5f" opacity="0.5"/>
+          <circle cx="60"  cy="290" r="2" fill="#2d5a3f" opacity="0.5"/>
         </svg>
       </div>
 
@@ -91,9 +132,61 @@
     </div>
   </header>
 
+  <!-- ═══ CATEGORIES STRIP ═════════════════════════ -->
+  <section class="categories">
+    <div class="section-intro reveal">
+      <h2 class="section-title">What's <em>inside</em>.</h2>
+      <p class="section-sub">Resources are organised by type — tap a category to jump straight into it.</p>
+    </div>
+    <div class="cat-grid">
+      <a class="cat-tile t-paper reveal delay-1" href="library.html?cat=Paper">
+        <div class="cat-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg>
+        </div>
+        <div class="cat-name">Papers</div>
+        <div class="cat-meta">Foundational reading & preprints</div>
+      </a>
+      <a class="cat-tile t-course reveal delay-1" href="library.html?cat=Course">
+        <div class="cat-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5a6 3 0 0 0 12 0v-5"/></svg>
+        </div>
+        <div class="cat-name">Courses</div>
+        <div class="cat-meta">Structured learning paths</div>
+      </a>
+      <a class="cat-tile t-video reveal delay-2" href="library.html?cat=Video">
+        <div class="cat-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        </div>
+        <div class="cat-name">Videos</div>
+        <div class="cat-meta">Lectures, talks & demos</div>
+      </a>
+      <a class="cat-tile t-book reveal delay-2" href="library.html?cat=Book">
+        <div class="cat-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+        </div>
+        <div class="cat-name">Books</div>
+        <div class="cat-meta">Textbooks & reference</div>
+      </a>
+      <a class="cat-tile t-tool reveal delay-3" href="library.html?cat=Tool">
+        <div class="cat-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+        </div>
+        <div class="cat-name">Tools</div>
+        <div class="cat-meta">SDKs, simulators & playgrounds</div>
+      </a>
+      <a class="cat-tile t-article reveal delay-3" href="library.html?cat=Article">
+        <div class="cat-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5z"/><path d="M8 7h8M8 11h8"/></svg>
+        </div>
+        <div class="cat-name">Articles</div>
+        <div class="cat-meta">Blog posts & explainers</div>
+      </a>
+    </div>
+  </section>
+
   <!-- ═══ FEATURED ═════════════════════════════════ -->
   <section class="featured" id="featured">
-    <div class="section-head">
+    <div class="section-head reveal">
       <div class="section-num"><strong>01</strong> Featured from the Archive</div>
       <a class="section-cta" href="library.html">View all <span class="arrow">→</span></a>
     </div>
@@ -105,14 +198,81 @@
     </div>
   </section>
 
-  <!-- ═══ JOIN + CONTACT ═══════════════════════════ -->
-  <section class="community" id="community">
-    <div class="community-grid">
+  <!-- ═══ EVENTS ═══════════════════════════════════ -->
+  <section class="events" id="events">
+    <div class="section-head reveal">
+      <div>
+        <div class="section-num"><strong>02</strong> Upcoming &amp; Recent Events</div>
+        <h2 class="section-title" style="margin-top:14px;">From the <em>community</em>.</h2>
+      </div>
+    </div>
 
-      <!-- JOIN -->
-      <div class="cs-card" id="join">
+    <div class="events-grid">
+      <article class="event-card reveal delay-1">
+        <div class="event-image">
+          <img src="https://picsum.photos/seed/quantumworkshop/600/400" alt="Workshop session" loading="lazy" />
+          <div class="event-date"><div class="event-day">15</div><div class="event-month">May</div></div>
+          <span class="event-tag">Workshop</span>
+        </div>
+        <div class="event-body">
+          <h3 class="event-title">Quantum 101 — A Hands-on Workshop</h3>
+          <div class="event-meta">
+            <span>OAU CSDC Hall</span><span class="sep"></span><span>2:00 PM WAT</span>
+          </div>
+          <p class="event-desc">A beginner-friendly introduction to qubits, superposition and entanglement — with live coding in Qiskit.</p>
+          <div class="event-foot">
+            <a class="event-cta" href="#">RSVP →</a>
+            <span class="event-status upcoming">Upcoming</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="event-card reveal delay-2">
+        <div class="event-image">
+          <img src="https://picsum.photos/seed/quantumhackathon/600/400" alt="Hackathon participants" loading="lazy" />
+          <div class="event-date"><div class="event-day">02</div><div class="event-month">Jun</div></div>
+          <span class="event-tag">Hackathon</span>
+        </div>
+        <div class="event-body">
+          <h3 class="event-title">Quantum Algorithms Hackathon</h3>
+          <div class="event-meta">
+            <span>Online &amp; OAU</span><span class="sep"></span><span>48 hours</span>
+          </div>
+          <p class="event-desc">Build, ship and demo a small quantum-algorithm project — mentors from industry and academia on hand.</p>
+          <div class="event-foot">
+            <a class="event-cta" href="#">Details →</a>
+            <span class="event-status upcoming">Planned</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="event-card reveal delay-3">
+        <div class="event-image">
+          <img src="https://picsum.photos/seed/quantumtalks/600/400" alt="Speaker on stage" loading="lazy" />
+          <div class="event-date"><div class="event-day">21</div><div class="event-month">Jun</div></div>
+          <span class="event-tag">Speaker</span>
+        </div>
+        <div class="event-body">
+          <h3 class="event-title">Industry Speaker Series — IBM Quantum</h3>
+          <div class="event-meta">
+            <span>OAU Auditorium</span><span class="sep"></span><span>1.5 hours</span>
+          </div>
+          <p class="event-desc">A guest engineer from the IBM Quantum team walks through real-world challenges in scaling quantum hardware.</p>
+          <div class="event-foot">
+            <a class="event-cta" href="#">Save your seat →</a>
+            <span class="event-status">Save the date</span>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ═══ JOIN ═════════════════════════════════════ -->
+  <section class="community">
+    <div class="community-grid">
+      <div class="cs-card reveal" id="join">
         <div class="cs-tag">Coming Soon</div>
-        <div class="section-num"><strong>02</strong> Join the Community</div>
+        <div class="section-num"><strong>03</strong> Join the Community</div>
         <h2 class="cs-title">Become a <em>member</em>.</h2>
         <p class="cs-desc">
           New-member registration is launching shortly. Sign up to contribute resources,
@@ -120,13 +280,15 @@
         </p>
 
         <form class="cs-form" aria-disabled="true" onsubmit="event.preventDefault();">
-          <div class="field">
-            <label>Full name</label>
-            <input type="text" placeholder="Ada Lovelace" disabled />
-          </div>
-          <div class="field">
-            <label>Email</label>
-            <input type="email" placeholder="you@example.com" disabled />
+          <div class="field-row">
+            <div class="field">
+              <label>Full name</label>
+              <input type="text" placeholder="Ada Lovelace" disabled />
+            </div>
+            <div class="field">
+              <label>Email</label>
+              <input type="email" placeholder="you@example.com" disabled />
+            </div>
           </div>
           <div class="field">
             <label>Affiliation</label>
@@ -135,34 +297,6 @@
           <button type="button" class="submit-btn" disabled>Coming soon →</button>
         </form>
       </div>
-
-      <!-- CONTACT -->
-      <div class="cs-card" id="contact">
-        <div class="cs-tag">Coming Soon</div>
-        <div class="section-num"><strong>03</strong> Contact Us</div>
-        <h2 class="cs-title">Get in <em>touch</em>.</h2>
-        <p class="cs-desc">
-          Got a question, partnership idea, or feedback for the archive? A proper
-          contact channel is being wired up — for now, this section is a placeholder.
-        </p>
-
-        <form class="cs-form" aria-disabled="true" onsubmit="event.preventDefault();">
-          <div class="field">
-            <label>Your name</label>
-            <input type="text" placeholder="Anonymous" disabled />
-          </div>
-          <div class="field">
-            <label>Subject</label>
-            <input type="text" placeholder="What's this about?" disabled />
-          </div>
-          <div class="field">
-            <label>Message</label>
-            <textarea placeholder="Tell us what's on your mind…" disabled></textarea>
-          </div>
-          <button type="button" class="submit-btn" disabled>Coming soon →</button>
-        </form>
-      </div>
-
     </div>
   </section>
 
@@ -186,6 +320,7 @@
 <script src="js/utils.js"></script>
 <script src="js/api.js"></script>
 <script src="js/ui.js"></script>
+<script src="js/reveal.js"></script>
 <script src="js/app.js"></script>
 
 </body>
